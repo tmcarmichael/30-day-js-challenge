@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+  <meta charset="UTF-8">
+  <title>HTML5 Canvas</title>
+
+</head>
+
+<body>
+
+<button onclick="eraseButton()">ERASE</button>
+<button onclick="mode1Button()">1</button>
+<button onclick="mode2Button()">2</button>
+<button onclick="mode3Button()">3</button>
+<canvas id="draw" width="800" height="800"></canvas>
+
+<script>
+const canvas = document.querySelector('#draw');
+const ctx = canvas.getContext('2d');
+
+canvas.width = window.innerWidth;
+canvas.height = window.innerHeight;
+
+ctx.strokeStyle = '#BADA55';
+ctx.lineJoin = 'miter';
+ctx.lineCap = 'miter';
+ctx.lineWidth = 10;
+ctx.globalCompositeOperation = 'multiply';
+
+let isDrawing = false;
+let lastX = 0;
+let lastY = 0;
+let hue = 0;
+let mode = "draw1";
+
+function draw(event) {
+  if(!isDrawing) return;
+  switch(mode) {
+    case "draw3":
+    console.log(event);
+    ctx.strokeStyle = `hsl(${hue}, 100%, 50%)`;
+    ctx.beginPath();
+    lastX = Math.floor(Math.random() * canvas.width + 1);
+    lastY = Math.floor(Math.random() * canvas.height + 1);
+    ctx.moveTo(lastX, lastY);
+    ctx.lineTo(event.offsetX, event.offsetY);
+    ctx.stroke();
+    [lastX, lastY] = [event.offsetX, event.offsetY];
+    hue = (hue+2)%360;
+    ctx.lineWidth = (ctx.lineWidth%30)+7
+    break;
+
+    case "draw2":
+    ctx.strokeStyle = `hsl(${hue}, 100%, 50%)`;
+    ctx.lineJoin = 'round';
+    ctx.lineCap = 'round';
+    ctx.beginPath();
+    ctx.moveTo(lastX, lastY);
+    ctx.lineTo(event.offsetX, event.offsetY);
+    ctx.stroke();
+    [lastX, lastY] = [event.offsetX, event.offsetY];
+    hue = (hue+2)%360;
+    ctx.lineWidth = (ctx.lineWidth%30)+7
+    break;
+
+    case "draw1":
+    ctx.strokeStyle = `hsl(${hue}, 100%, 50%)`;
+    ctx.beginPath();
+    ctx.moveTo(lastX, lastY);
+    ctx.lineTo(event.offsetX, event.offsetY);
+    ctx.stroke();
+    [lastX, lastY] = [event.offsetX, event.offsetY];
+    hue = (hue+2)%360;
+    lastX = lastX + Math.floor(Math.random() * 40)
+    lastY = lastY + Math.floor(Math.random() * 40)
+    ctx.lineWidth = (ctx.lineWidth%10)+4
+    break;
+  } 
+}
+
+const eraseButton = () => ctx.clearRect(0, 0, canvas.width, canvas.height)
+const mode1Button = () => mode ="draw1";
+const mode2Button = () => mode ="draw2";
+const mode3Button = () => mode ="draw3";
+
+canvas.addEventListener('mousedown', (event) => {
+  isDrawing = true;
+  [lastX, lastY] = [event.offsetX, event.offsetY];
+});
+
+canvas.addEventListener('mousemove', draw);
+canvas.addEventListener('mousedown', () => isDrawing = true);
+canvas.addEventListener('mouseup', () => isDrawing = false);
+canvas.addEventListener('mouseout', () => isDrawing = false);
+</script>
+
+<style>
+  html, body {
+    margin: 0;
+  }
+</style>
+
+</body>
+</html>
