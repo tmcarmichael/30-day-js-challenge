@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>JS Reference VS Copy</title>
+</head>
+<body>
+
+  <script>
+    const team = ['Wes', 'Sarah', 'Ryan', 'Poppy'];
+    const team1 = team.splice();
+    const team2 = [].concat(team);
+    const team3 = [...team];
+    const team4 = Array.from(team);
+
+    // with Objects
+    const person = {
+      name: 'Wes Bos',
+      age: 80
+    };
+    const person1 = Object.assign({}, person, {number: 99});
+    // const person2 = {...person};
+
+    // Things to note - this is only 1 level deep - both for Arrays and Objects. lodash has a cloneDeep method, but you should think twice before using it.
+
+    // deep copy: stringify and parse the obj results in deep copy instead of shallow copy
+    // const obj2 = JSON.parse(JSON.stringify(obj));
+
+  </script>
+
+</body>
+</html>
